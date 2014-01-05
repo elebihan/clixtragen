@@ -21,9 +21,7 @@
 #
 
 """
-generates helpers for a command line interpreter
+collection of source code parsers.
 """
-
-__version__ = '0.2.0'
 
 # vim: ts=4 sts=4 sw=4 et ai

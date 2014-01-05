@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: clixtragen 0.1.0\n"
+"Project-Id-Version: clixtragen 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-12 18:12+0100\n"
+"POT-Creation-Date: 2014-01-05 22:12+0100\n"
 "PO-Revision-Date: 2013-12-12 18:15+0100\n"
 "Last-Translator: Eric Le Bihan <eric.le.bihan.dev@free.fr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,14 +16,18 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: scripts/clixtragen:35
+#: scripts/clixtragen:42
+msgid "print program invocation as YAML and exit"
+msgstr "affiche l'invocation du programme en YAML et sort."
+
+#: scripts/clixtragen:44
 msgid "name of the program"
 msgstr "nom du programme"
 
-#: scripts/clixtragen:37
+#: scripts/clixtragen:46
 msgid "source file to parse"
 msgstr "fichier source à analyser"
 
-#: scripts/clixtragen:40
+#: scripts/clixtragen:49
 msgid "set output filename"
 msgstr "définit le nom du fichier de sortie"

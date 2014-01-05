@@ -25,5 +25,6 @@ OPTIONS
 =======
 
 -o FILE, --output FILE          set output filename
+-y, --yaml                      print program invocation as YAML and exit
 
 .. vim: ft=rst

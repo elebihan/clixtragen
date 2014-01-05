@@ -21,23 +21,23 @@
 #
 
 """
-collection of generators
+ZSH completion generator
 """
 
 class ZshCompletionGenerator(object):
     """Generates ZSH completion"""
 
-    def generate(self, progname, args, opts):
+    def generate(self, progname, invocation):
         text = "#compdef {}\n\n".format(progname)
         text += "local curcontext=\"$curcontext\" line state expl ret=1\n\n"
         text += "_arguments -C -s \\\n"
-        for opt in opts:
-            if opt.sname and opt.lname:
-                name = "'({0.sname} {0.lname})'{{{0.sname},{0.lname}}}'"
-            elif opt.sname:
-                name = "'{0.sname}"
-            elif opt.lname:
-                name = "'{0.lname}"
+        for opt in invocation.options:
+            if opt.short_name and opt.long_name:
+                name = "'({0.short_name} {0.long_name})'{{{0.short_name},{0.long_name}}}'"
+            elif opt.short_name:
+                name = "'{0.short_name}"
+            elif opt.long_name:
+                name = "'{0.long_name}"
             else:
                 raise RuntimeError('invalid option')
             name = name.format(opt)
@@ -63,13 +63,13 @@ class ZshCompletionGenerator(object):
                 value = ""
             text += "\t{}{}{}' \\\n".format(name, help, value)
 
-        for index, arg in enumerate(args):
+        for index, arg in enumerate(invocation.arguments):
             text += "\t'{0}:{1}:->{1}' \\\n".format(index + 1, arg.name)
         text += "&& ret=0\n\n"
 
-        if args:
+        if invocation.arguments:
             text += "case \"$state\" in\n"
-            for arg in args:
+            for arg in invocation.arguments:
                 fmt = "\t({0.name})\n\t\t_message '{0.help}' && ret=0\n\t\t;;\n"
                 text += fmt.format(arg)
             text += "esac\n\n"

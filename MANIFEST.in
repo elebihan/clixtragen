@@ -4,3 +4,4 @@ include COPYING
 include disthelpers.py
 recursive-include man *.rst
 recursive-include po *.po
+recursive-include tests *.py
