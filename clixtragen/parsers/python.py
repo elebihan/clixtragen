@@ -216,6 +216,8 @@ class ArgparseVisitor(ast.NodeVisitor):
                 self.visit(node.value)
 
     def visit_Call(self, node):
+        if self.state != STATE_IDLE:
+            return
         call = Call()
         self.calls.append(self.call)
         self.call = call
