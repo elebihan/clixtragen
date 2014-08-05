@@ -184,7 +184,6 @@ class ArgparseVisitor(ast.NodeVisitor):
         self.call = None
         self.dest = None
         self.root = None
-        self.calls = []
 
     def visit_Str(self, node):
         if self.state == STATE_PARSE_CALL_ARG:
@@ -218,9 +217,7 @@ class ArgparseVisitor(ast.NodeVisitor):
     def visit_Call(self, node):
         if self.state != STATE_IDLE:
             return
-        call = Call()
-        self.calls.append(self.call)
-        self.call = call
+        self.call = Call()
 
         self.state = STATE_PARSE_CALL_FUNC
         self.visit(node.func)
@@ -241,8 +238,6 @@ class ArgparseVisitor(ast.NodeVisitor):
         self.state = STATE_IDLE
 
         self.process_call()
-
-        self.call = self.calls.pop()
 
     def visit_Assign(self, node):
         if len(node.targets) > 1:
