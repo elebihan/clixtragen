@@ -48,16 +48,17 @@ class ArgparseNode:
     def search_child(self, name):
         """Searches for a child node by its name.
 
+        If several children have the same name, the last child is returned.
+
         :param name: name of the node.
         :type name: str.
         """
         if self.name == name:
             return self
+        candidates = [c for c in self.children if c.name == name]
+        if candidates:
+            return candidates[-1]
         for child in self.children:
-            if not child.name:
-                continue
-            if child.name == name:
-                return child
             node = child.search_child(name)
             if node:
                 return node
@@ -183,6 +184,7 @@ class ArgparseVisitor(ast.NodeVisitor):
         self.call = None
         self.dest = None
         self.root = None
+        self.calls = []
 
     def visit_Str(self, node):
         if self.state == STATE_PARSE_CALL_ARG:
@@ -214,7 +216,9 @@ class ArgparseVisitor(ast.NodeVisitor):
                 self.visit(node.value)
 
     def visit_Call(self, node):
-        self.call = Call()
+        call = Call()
+        self.calls.append(self.call)
+        self.call = call
 
         self.state = STATE_PARSE_CALL_FUNC
         self.visit(node.func)
@@ -236,6 +240,8 @@ class ArgparseVisitor(ast.NodeVisitor):
 
         self.process_call()
 
+        self.call = self.calls.pop()
+
     def visit_Assign(self, node):
         if len(node.targets) > 1:
             return
@@ -246,6 +252,7 @@ class ArgparseVisitor(ast.NodeVisitor):
         self.visit(node.value)
 
     def process_call(self):
+        _debug("Processing call '{}'".format(self.call))
         if self.call.attr == 'ArgumentParser':
             self.add_parser(self.dest)
         elif self.call.attr == 'add_subparsers':
@@ -262,6 +269,8 @@ class ArgparseVisitor(ast.NodeVisitor):
                                self.dest,
                                self.call.args,
                                self.call.keywords)
+        else:
+            _debug("Skipped call")
 
     def add_parser(self, name):
         _debug("Adding new parser '{}'".format(name))
@@ -275,7 +284,7 @@ class ArgparseVisitor(ast.NodeVisitor):
         node.children.append(child)
 
     def add_argument(self, name, args, keywords):
-        _debug("Adding new argument to '{}'".format(name))
+        _debug("Adding new argument/option to '{}'".format(name))
         child = ArgparseNode(None)
         child.data = create_argument(args, keywords)
         node = self.root.search_child(name)
