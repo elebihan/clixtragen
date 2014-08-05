@@ -29,6 +29,10 @@ import re
 from gettext import gettext as _
 from ..common import ProgramInvocation, Argument, Option
 from ..common import CommandGroup, Command
+from ..common import debug
+
+def _debug(message):
+    debug("python parser: {}".format(message))
 
 class ArgparseNode:
     """An node in a tree storing information about argparse parser.
@@ -257,25 +261,25 @@ class ArgparseVisitor(ast.NodeVisitor):
                                self.call.keywords)
 
     def add_parser(self, name):
-        #print("Adding new parser '{}'".format(name))
+        _debug("Adding new parser '{}'".format(name))
         self.root = ArgparseNode(name)
 
     def add_subparsers(self, parent, name, args, keywords):
-        #print("Adding new subparsers '{}' to '{}'".format(name, parent))
+        _debug("Adding new subparsers '{}' to '{}'".format(name, parent))
         child = ArgparseNode(name)
         child.data = create_command_group(args, keywords)
         node = self.root.search_child(parent)
         node.children.append(child)
 
     def add_argument(self, name, args, keywords):
-        #print("Adding new argument to '{}'".format(name))
+        _debug("Adding new argument to '{}'".format(name))
         child = ArgparseNode(None)
         child.data = create_argument(args, keywords)
         node = self.root.search_child(name)
         node.children.append(child)
 
     def add_subparser(self, parent, name, args, keywords):
-        #print("Adding new subparser '{}' to '{}'".format(name, parent))
+        _debug("Adding new subparser '{}' to '{}'".format(name, parent))
         child = ArgparseNode(name)
         child.data = create_command(args, keywords)
         node = self.root.search_child(parent)

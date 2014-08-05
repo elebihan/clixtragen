@@ -27,6 +27,37 @@ Common classes and helpers.
 import re
 from gettext import gettext as _
 
+import os
+import logging
+from gettext import bindtextdomain, textdomain
+
+__LOG_LEVELS = {
+    'debug': logging.DEBUG,
+    'info': logging.INFO,
+    'warning': logging.WARNING,
+    'error': logging.ERROR
+}
+
+try:
+    value = os.environ.get('CLIXTRAGEN_LOG', 'warning').lower()
+    __level = __LOG_LEVELS[value]
+except:
+    __level = logging.WARNING
+
+__logger = logging.getLogger('clixtragen')
+__logger.setLevel(__level)
+
+def debug(message):
+    """Log a debug message.
+
+    The message will only be printed to standard output if the environment
+    variable 'CLIXTRAGEN_LOG' is set to 'debug'.
+
+    :param message: the message to be logged.
+    :type message: str.
+    """
+    __logger.debug(message)
+
 def start_yaml(indent, in_list):
     prefix = 4 * indent * ' '
     text = prefix
