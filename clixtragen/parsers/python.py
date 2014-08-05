@@ -125,9 +125,11 @@ def create_argument(args, keywords):
                 o.long_name = a
             elif a.startswith('-'):
                 o.short_name = a
+        _debug("Created option '{}'".format(o))
     else:
         o = Argument()
         o.name = args[0]
+        _debug("Created argument '{}'".format(o))
     o.help = keywords.get('help', None)
     return o
 
@@ -145,6 +147,7 @@ def create_command(args, keywords):
     cmd = Command()
     cmd.name = args[0]
     cmd.help = keywords.get('help', None)
+    _debug("Created command '{}'".format(cmd))
     return cmd
 
 class Call:
