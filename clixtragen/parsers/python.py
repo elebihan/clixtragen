@@ -300,7 +300,8 @@ class ArgparseVisitor(ast.NodeVisitor):
         node.children.append(child)
 
 def ungettextize(text):
-    return re.sub(r'help=_\((.+)\)', r'help=\1', text)
+    sanitized = re.sub(r'help=_\((.+)\)', r'help=\1', text)
+    return re.sub(r'metavar=_\((.+)\)', r'metavar=\1', sanitized)
 
 class PythonParser(object):
     """Parses a Python file."""
