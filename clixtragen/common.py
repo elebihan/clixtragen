@@ -94,6 +94,9 @@ class Argument:
         text += "help: {}\n".format(self.help or '')
         return text
 
+    def __str__(self):
+        return self.name
+
 class Option:
     """Stores information about an option of the program"""
     def __init__(self):
@@ -118,6 +121,14 @@ class Option:
         for c in self.choices:
             text += c.to_yaml(indent + 1, True)
         return text
+
+    def __str__(self):
+        if self.short_name and self.long_name:
+            return "{}/{}".format(self.short_name, self.long_name)
+        if self.short_name:
+            return self.short_name
+        if self.long_name:
+            return self.long_name
 
 class CommandGroup(Argument):
     """Stores information about a group of commands"""
@@ -156,5 +167,8 @@ class Command:
         for a in self.arguments:
             text += a.to_yaml(indent + 1, True)
         return text
+
+    def __str__(self):
+        return self.name
 
 # vim: ts=4 sts=4 sw=4 et ai
