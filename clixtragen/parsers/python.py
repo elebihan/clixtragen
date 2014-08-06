@@ -99,7 +99,7 @@ def format_call_arg(arg):
     if arg[0] == CALL_ARG_TYPE_STR:
         return "'{}'".format(arg[1])
     else:
-        return arg[1]
+        return str(arg[1])
 
 def format_call_kw(kw):
     if kw[0] == CALL_ARG_TYPE_STR:
