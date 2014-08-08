@@ -55,13 +55,14 @@ if __name__ == '__main__':
 
     parser = PythonParser()
     invocation = parser.parse_file(args.filename)
+    invocation.name = args.progname
 
     if args.as_yaml:
         print(invocation.to_yaml().strip())
         sys.exit(0)
 
     generator = ZshCompletionGenerator()
-    text = generator.generate(args.progname, invocation)
+    text = generator.generate(invocation)
 
     if args.output:
         with open(args.output, 'w') as f:

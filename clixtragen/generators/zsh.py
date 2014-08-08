@@ -27,8 +27,8 @@ ZSH completion generator
 class ZshCompletionGenerator(object):
     """Generates ZSH completion"""
 
-    def generate(self, progname, invocation):
-        text = "#compdef {}\n\n".format(progname)
+    def generate(self, invocation):
+        text = "#compdef {}\n\n".format(invocation.name)
         text += "local curcontext=\"$curcontext\" line state expl ret=1\n\n"
         text += "_arguments -C -s \\\n"
         for opt in invocation.options:

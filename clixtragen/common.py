@@ -67,13 +67,15 @@ def start_yaml(indent, in_list):
     return prefix, text
 
 class ProgramInvocation:
-    """Stores information about invocation of aprogram"""
+    """Stores information about invocation of a program """
     def __init__(self):
+        self.name = None
         self.options = []
         self.arguments = []
 
     def to_yaml(self):
-        text = 'options:\n'
+        text = "name: {}\n".format(self.name)
+        text += 'options:\n'
         for o in self.options:
             text += o.to_yaml(1, True)
         text += 'arguments:\n'
