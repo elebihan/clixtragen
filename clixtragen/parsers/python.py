@@ -126,6 +126,7 @@ def create_argument(args, keywords):
                 o.long_name = a
             elif a.startswith('-'):
                 o.short_name = a
+        o.action = keywords.get('action', None)
         _debug("Created option '{}'".format(o))
     else:
         o = Argument()
