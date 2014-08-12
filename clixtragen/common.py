@@ -173,4 +173,18 @@ class Command:
     def __str__(self):
         return self.name
 
+def split(string):
+    crumbs = []
+    for chunk in re.split('\W+', string):
+        pieces = re.findall('[A-Z][^A-Z]*', chunk)
+        if pieces:
+            crumbs += pieces
+        else:
+            crumbs.append(chunk)
+    return crumbs
+
+def lowerize(string):
+    fields = split(string)
+    return '_'.join(map(lambda x: x.lower(), fields))
+
 # vim: ts=4 sts=4 sw=4 et ai
