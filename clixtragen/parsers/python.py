@@ -26,9 +26,9 @@ Python source code parser.
 
 import ast
 import re
-from gettext import gettext as _
 from ..common import ProgramInvocation, Argument, Option
 from ..common import CommandGroup, Command
+from ..common import OPTION_TYPE_FLAG, OPTION_TYPE_VALUE
 from ..common import debug
 
 def _debug(message):
@@ -115,6 +115,18 @@ def sanitize_keywords(keywords):
     items = [(n, v) for t, n, v in keywords if t == CALL_ARG_TYPE_STR]
     return dict(items)
 
+def get_option_type_from_keywords(keywords):
+    choices = keywords.get('choices', None)
+    if choices:
+        return OPTION_TYPE_VALUE
+    action = keywords.get('action', None)
+    if not action:
+        return OPTION_TYPE_FLAG
+    if action.startswith('store_'):
+        return OPTION_TYPE_FLAG
+    else:
+        return OPTION_TYPE_VALUE
+
 def create_argument(args, keywords):
     args = sanitize_args(args)
     keywords = sanitize_keywords(keywords)
@@ -126,7 +138,7 @@ def create_argument(args, keywords):
                 o.long_name = a
             elif a.startswith('-'):
                 o.short_name = a
-        o.action = keywords.get('action', None)
+        o.type = get_option_type_from_keywords(keywords)
         _debug("Created option '{}'".format(o))
     else:
         o = Argument()

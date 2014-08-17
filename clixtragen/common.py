@@ -25,11 +25,8 @@ Common classes and helpers.
 """
 
 import re
-from gettext import gettext as _
-
 import os
 import logging
-from gettext import bindtextdomain, textdomain
 
 __LOG_LEVELS = {
     'debug': logging.DEBUG,
@@ -99,13 +96,15 @@ class Argument:
     def __str__(self):
         return self.name
 
+(OPTION_TYPE_FLAG, OPTION_TYPE_VALUE) = range(2)
+
 class Option:
     """Stores information about an option of the program"""
     def __init__(self):
         self.short_name = None
         self.long_name = None
         self.help = None
-        self.action = None
+        self.type = OPTION_TYPE_FLAG
         self.metavar = None
         self.choices = []
 

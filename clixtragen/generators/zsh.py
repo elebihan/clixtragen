@@ -25,6 +25,7 @@ ZSH completion generator
 """
 
 from ..common import CommandGroup, lowerize
+from ..common import OPTION_TYPE_VALUE
 
 _CMD_GROUP_FUNC_BODY = '''
 	if (( CURRENT == 1 )); then
@@ -78,7 +79,7 @@ class ZshCompletionGenerator(object):
                 help = "[{}]".format(opt.help)
             else:
                 help = ""
-            if not opt.action:
+            if opt.type == OPTION_TYPE_VALUE:
                 if opt.metavar:
                     variable = opt.metavar.lower()
                     value = _value_from_name(variable, 'value')
