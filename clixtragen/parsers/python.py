@@ -115,17 +115,16 @@ def sanitize_keywords(keywords):
     items = [(n, v) for t, n, v in keywords if t == CALL_ARG_TYPE_STR]
     return dict(items)
 
-def get_option_type_from_keywords(keywords):
-    choices = keywords.get('choices', None)
-    if choices:
-        return OPTION_TYPE_VALUE
-    action = keywords.get('action', None)
+def convert_action(action):
     if not action:
         return OPTION_TYPE_FLAG
-    if action.startswith('store_'):
+    if action.startswith('store_') or action == 'version':
         return OPTION_TYPE_FLAG
     else:
         return OPTION_TYPE_VALUE
+
+def convert_choices(choices):
+    return []
 
 def create_argument(args, keywords):
     args = sanitize_args(args)
@@ -138,7 +137,12 @@ def create_argument(args, keywords):
                 o.long_name = a
             elif a.startswith('-'):
                 o.short_name = a
-        o.type = get_option_type_from_keywords(keywords)
+        action = keywords.get('action', None)
+        o.type = convert_action(action)
+        choices = keywords.get('choices', None)
+        if choices:
+            o.type = OPTION_TYPE_VALUE
+        o.choices = convert_choices(choices)
         _debug("Created option '{}'".format(o))
     else:
         o = Argument()
