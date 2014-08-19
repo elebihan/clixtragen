@@ -37,14 +37,15 @@ setup_i18n()
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--version',
-                        action='version')
+                        action='version',
+                        version=__version__)
     parser.add_argument('-y', '--yaml',
                         action='store_true',
                         dest='as_yaml',
                         default=False,
                         help=_('print program invocation as YAML and exit'))
-    parser.add_argument('progname',
-                        help=_('name of the program'))
+    parser.add_argument('execname',
+                        help=_('name of the executable'))
     parser.add_argument('filename',
                         help=_('source file to parse'))
     parser.add_argument('-o', '--output',
@@ -55,7 +56,7 @@ if __name__ == '__main__':
 
     parser = PythonParser()
     invocation = parser.parse_file(args.filename)
-    invocation.name = args.progname
+    invocation.name = args.execname
 
     if args.as_yaml:
         print(invocation.to_yaml().strip())

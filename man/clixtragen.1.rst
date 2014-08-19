@@ -13,7 +13,7 @@ Generate helpers for a CLI
 SYNOPSIS
 ========
 
-clixtragen [OPTIONS] <program name> <source file>
+clixtragen [OPTIONS] <executable name> <source file>
 
 DESCRIPTION
 ===========
