@@ -117,7 +117,7 @@ def sanitize_keywords(keywords):
 
 def convert_action(action):
     if not action:
-        return OPTION_TYPE_FLAG
+        return OPTION_TYPE_VALUE
     if action.startswith('store_') or action == 'version':
         return OPTION_TYPE_FLAG
     else:
