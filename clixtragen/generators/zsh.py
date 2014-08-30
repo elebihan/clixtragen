@@ -47,18 +47,18 @@ _CMD_GROUP_FUNC_BODY = '''
 }}
 '''
 
-def _value_from_name(name, default=''):
+def _func_from_name(name):
     if name.startswith('file'):
-        value = "_files"
+        func = ":_files"
     elif name.startswith('dir'):
-        value = "_directories"
+        func = ":_directories"
     elif name.startswith('iface'):
-        value = "_net_interfaces"
+        func = ":_net_interfaces"
     elif name.startswith('url'):
-        value = "_urls"
+        func = ":_urls"
     else:
-        value = default
-    return value
+        func = ''
+    return func
 
 class ZshCompletionGenerator(object):
     """Generates ZSH completion"""
@@ -68,8 +68,7 @@ class ZshCompletionGenerator(object):
         for opt in options:
             if opt.short_name and opt.long_name:
                 name = "'({0.short_name} {0.long_name})'{{{0.short_name},{0.long_name}}}'"
-            elif opt.short_name:
-                name = "'{0.short_name}"
+            elif opt.short_name: name = "'{0.short_name}"
             elif opt.long_name:
                 name = "'{0.long_name}"
             else:
@@ -82,7 +81,8 @@ class ZshCompletionGenerator(object):
             if opt.type == OPTION_TYPE_VALUE:
                 if opt.metavar:
                     variable = opt.metavar.lower()
-                    value = _value_from_name(variable, 'value')
+                    func = _func_from_name(variable)
+                    value = '{}{}'.format(variable, func)
                 else:
                     value = 'value'
                 value = ":{}".format(value)
@@ -98,8 +98,8 @@ class ZshCompletionGenerator(object):
                 fmt = " \\\n\t'*::{} command:_{}_command'"
                 text += fmt.format(execname, lowerize(execname))
             else:
-                value = _value_from_name(arg.name)
-                text += " \\\n\t'{}:{}:{}'".format(index + 1, arg.name, value)
+                func = _func_from_name(arg.name)
+                text += " \\\n\t'{}:{}{}'".format(index + 1, arg.name, func)
         return text
 
     def _format_command(self, execname, command):
