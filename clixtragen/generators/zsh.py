@@ -28,22 +28,22 @@ from ..common import CommandGroup, lowerize
 from ..common import OPTION_TYPE_VALUE
 
 _CMD_GROUP_FUNC_BODY = '''
-	if (( CURRENT == 1 )); then
-		_describe -t commands '{execname} command' _{prefix}_cmds || compadd "$@"
-	else
-		local curcontext="$curcontext"
+    if (( CURRENT == 1 )); then
+        _describe -t commands '{execname} command' _{prefix}_cmds || compadd "$@"
+    else
+        local curcontext="$curcontext"
 
-		cmd="${{${{_{prefix}_cmds[(r)$words[1]:*]%%:*}}}}"
+        cmd="${{${{_{prefix}_cmds[(r)$words[1]:*]%%:*}}}}"
 
-		if (( $#cmd )); then
-			curcontext="${{curcontext%:*:*}}:{execname}-${{cmd}}:"
+    if (( $#cmd )); then
+            curcontext="${{curcontext%:*:*}}:{execname}-${{cmd}}:"
 
-			_call_function ret _{prefix}_$cmd || _message 'no more arguments'
-		else
-			_message "unknown {execname} command: $words[1]"
-		fi
-		return ret
-	fi
+            _call_function ret _{prefix}_$cmd || _message 'no more arguments'
+        else
+            _message "unknown {execname} command: $words[1]"
+        fi
+        return ret
+    fi
 }}
 '''
 
@@ -68,7 +68,8 @@ class ZshCompletionGenerator(object):
         for opt in options:
             if opt.short_name and opt.long_name:
                 name = "'({0.short_name} {0.long_name})'{{{0.short_name},{0.long_name}}}'"
-            elif opt.short_name: name = "'{0.short_name}"
+            elif opt.short_name:
+                name = "'{0.short_name}"
             elif opt.long_name:
                 name = "'{0.long_name}"
             else:
@@ -88,24 +89,24 @@ class ZshCompletionGenerator(object):
                 value = ":{}".format(value)
             else:
                 value = ""
-            text += " \\\n\t{}{}{}'".format(name, help, value)
+            text += " \\\n        {}{}{}'".format(name, help, value)
         return text
 
     def _format_arguments(self, execname, arguments):
         text = ""
         for index, arg in enumerate(arguments):
             if isinstance(arg, CommandGroup):
-                fmt = " \\\n\t'*::{} command:_{}_command'"
+                fmt = " \\\n    '*::{} command:_{}_command'"
                 text += fmt.format(execname, lowerize(execname))
             else:
                 func = _func_from_name(arg.name)
-                text += " \\\n\t'{}:{}{}'".format(index + 1, arg.name, func)
+                text += " \\\n        '{}:{}{}'".format(index + 1, arg.name, func)
         return text
 
     def _format_command(self, execname, command):
         funcname = "_{}_{}".format(lowerize(execname), command.name)
         text = "\n(( $+functions[{}] )) || {}()\n{{".format(funcname, funcname)
-        text += "\n\t_arguments -w -C -S -s"
+        text += "\n    _arguments -w -S -s"
         text += self._format_options(command.options)
         text += self._format_arguments(command.name, command.arguments)
         text += "\n}\n"
@@ -118,11 +119,11 @@ class ZshCompletionGenerator(object):
         prefix = lowerize(execname)
         funcname = "_{}_{}".format(prefix, group.name or "command")
         text += "\n(( $+functions[{}] )) || {}()\n{{".format(funcname, funcname)
-        text += "\n\tlocal -a _{}_cmds".format(prefix)
-        text += "\n\t_{}_cmds=(".format(prefix)
+        text += "\n    local -a _{}_cmds".format(prefix)
+        text += "\n    _{}_cmds=(".format(prefix)
         for cmd in group.choices:
-            text += "\n\t\t\"{}:{}\"".format(cmd.name, cmd.help)
-        text += "\n\t)"
+            text += "\n        \"{}:{}\"".format(cmd.name, cmd.help)
+        text += "\n    )"
         text += _CMD_GROUP_FUNC_BODY.format(execname=execname,
                                             funcname=funcname,
                                             prefix=prefix)
@@ -134,10 +135,10 @@ class ZshCompletionGenerator(object):
         text = "#compdef {}\n".format(invocation.name)
         for group in groups:
             text += self._format_command_group(invocation.name, group)
-        text += "\n_arguments -s"
+        text += "\n_arguments -w -S -s"
         text += self._format_options(invocation.options)
         text += self._format_arguments(invocation.name, invocation.arguments)
-        text += '\n'
+        text += '\n\n# vim: ts=4 sts=4 sw=4 et ai\n'
         return text
 
 # vim: ts=4 sts=4 sw=4 et ai
