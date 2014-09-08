@@ -24,6 +24,7 @@
 ZSH completion generator
 """
 
+from .generator import Generator
 from ..common import CommandGroup, lowerize
 from ..common import OPTION_TYPE_VALUE
 
@@ -60,7 +61,7 @@ def _func_from_name(name):
         func = ''
     return func
 
-class ZshCompletionGenerator(object):
+class ZshCompletionGenerator(Generator):
     """Generates ZSH completion"""
 
     def _format_options(self, options):

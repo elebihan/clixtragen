@@ -26,6 +26,7 @@ Python source code parser.
 
 import ast
 import re
+from .parser import Parser
 from ..common import ProgramInvocation, Argument, Option
 from ..common import CommandGroup, Command
 from ..common import OPTION_TYPE_FLAG, OPTION_TYPE_VALUE
@@ -315,7 +316,7 @@ def ungettextize(text):
     sanitized = re.sub(r'help=_\((.+)\)', r'help=\1', text)
     return re.sub(r'metavar=_\((.+)\)', r'metavar=\1', sanitized)
 
-class PythonParser(object):
+class PythonParser(Parser):
     """Parses a Python file."""
 
     def parse_file(self, filename):
