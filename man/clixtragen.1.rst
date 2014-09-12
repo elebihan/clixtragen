@@ -24,7 +24,10 @@ completion function.
 OPTIONS
 =======
 
+-f LANGUAGE, --from LANGUAGE    set input language (default python)
+-g, --list-generators           print list of available generators and exit
 -o FILE, --output FILE          set output filename
--y, --yaml                      print program invocation as YAML and exit
+-p, --list-parsers              print list of available parsers and exit
+-t FORMAT, --to FORMAT          set output format (default YAML)
 
 .. vim: ft=rst

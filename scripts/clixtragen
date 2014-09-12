@@ -27,8 +27,8 @@ import logging
 from gettext import gettext as _
 from clixtragen import __version__
 from clixtragen.utils import setup_i18n
-from clixtragen.parsers.python import PythonParser
-from clixtragen.generators.zsh import ZshCompletionGenerator
+from clixtragen.parsers.factory import ParserFactory
+from clixtragen.generators.factory import GeneratorFactory
 
 logging.basicConfig()
 
@@ -39,11 +39,6 @@ if __name__ == '__main__':
     parser.add_argument('--version',
                         action='version',
                         version=__version__)
-    parser.add_argument('-y', '--yaml',
-                        action='store_true',
-                        dest='as_yaml',
-                        default=False,
-                        help=_('print program invocation as YAML and exit'))
     parser.add_argument('execname',
                         help=_('name of the executable'))
     parser.add_argument('filename',
@@ -51,18 +46,46 @@ if __name__ == '__main__':
     parser.add_argument('-o', '--output',
                         metavar='FILE',
                         help=_('set output filename'))
+    parser.add_argument('-f', '--from',
+                        default='python',
+                        dest='input_lang',
+                        metavar=_('LANGUAGE'),
+                        help=_('set input language'))
+    parser.add_argument('-t', '--to',
+                        default='yaml',
+                        dest='output_format',
+                        metavar=_('FORMAT'),
+                        help=_('set output format'))
+    parser.add_argument('-g', '--list-generators',
+                        action='store_true',
+                        default=False,
+                        help=_('print list of available generators and exit'))
+    parser.add_argument('-p', '--list-parsers',
+                        action='store_true',
+                        default=False,
+                        help=_('print list of available parsers and exit'))
 
     args = parser.parse_args()
 
-    parser = PythonParser()
+    pfactory = ParserFactory()
+    gfactory = GeneratorFactory()
+
+    if args.list_parsers:
+        for name in pfactory.names:
+            print(name)
+        sys.exit(0)
+
+    if args.list_generators:
+        for name in gfactory.names:
+            print(name)
+        sys.exit(0)
+
+    parser = pfactory.create_parser(args.input_lang)
+
     invocation = parser.parse_file(args.filename)
     invocation.name = args.execname
 
-    if args.as_yaml:
-        print(invocation.to_yaml().strip())
-        sys.exit(0)
-
-    generator = ZshCompletionGenerator()
+    generator = gfactory.create_generator(args.output_format)
     text = generator.generate(invocation)
 
     if args.output:
