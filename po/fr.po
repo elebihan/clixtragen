@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: clixtragen 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-19 19:20+0200\n"
+"POT-Creation-Date: 2014-09-12 12:43+0200\n"
 "PO-Revision-Date: 2013-12-12 18:15+0100\n"
 "Last-Translator: Eric Le Bihan <eric.le.bihan.dev@free.fr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,18 +16,38 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: scripts/clixtragen:46
-msgid "print program invocation as YAML and exit"
-msgstr "affiche l'invocation du programme en YAML et sort."
-
-#: scripts/clixtragen:48
+#: scripts/clixtragen:43
 msgid "name of the executable"
 msgstr "nom de l'exécutable"
 
-#: scripts/clixtragen:50
+#: scripts/clixtragen:45
 msgid "source file to parse"
 msgstr "fichier source à analyser"
 
-#: scripts/clixtragen:53
+#: scripts/clixtragen:48
 msgid "set output filename"
 msgstr "définit le nom du fichier de sortie"
+
+#: scripts/clixtragen:52
+msgid "LANGUAGE"
+msgstr "LANGAGE"
+
+#: scripts/clixtragen:53
+msgid "set input language"
+msgstr "définit le langage d'entrée"
+
+#: scripts/clixtragen:57
+msgid "FORMAT"
+msgstr "FORMAT"
+
+#: scripts/clixtragen:58
+msgid "set output format"
+msgstr "définit le format de sortie"
+
+#: scripts/clixtragen:62
+msgid "print list of available generators and exit"
+msgstr "affiche la liste des générateurs disponibles et sort"
+
+#: scripts/clixtragen:66
+msgid "print list of available parsers and exit"
+msgstr "affiche la liste des analyseurs disponibles et sort"
