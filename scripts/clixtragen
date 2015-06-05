@@ -21,21 +21,31 @@
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
 
+import sys
 import argparse
+import logging
 from gettext import gettext as _
 from clixtragen import __version__
 from clixtragen.utils import setup_i18n
-from clixtragen.parsers import PythonParser
-from clixtragen.generators import ZshCompletionGenerator
+from clixtragen.parsers.python import PythonParser
+from clixtragen.generators.zsh import ZshCompletionGenerator
+
+logging.basicConfig()
 
 setup_i18n()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--version',
-                        action='version')
-    parser.add_argument('progname',
-                        help=_('name of the program'))
+                        action='version',
+                        version=__version__)
+    parser.add_argument('-y', '--yaml',
+                        action='store_true',
+                        dest='as_yaml',
+                        default=False,
+                        help=_('print program invocation as YAML and exit'))
+    parser.add_argument('execname',
+                        help=_('name of the executable'))
     parser.add_argument('filename',
                         help=_('source file to parse'))
     parser.add_argument('-o', '--output',
@@ -45,10 +55,15 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     parser = PythonParser()
-    progargs, progopts = parser.parse_file(args.filename)
+    invocation = parser.parse_file(args.filename)
+    invocation.name = args.execname
+
+    if args.as_yaml:
+        print(invocation.to_yaml().strip())
+        sys.exit(0)
 
     generator = ZshCompletionGenerator()
-    text = generator.generate(args.progname, progargs, progopts)
+    text = generator.generate(invocation)
 
     if args.output:
         with open(args.output, 'w') as f:

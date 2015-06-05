@@ -1,0 +1,5 @@
+scripts/clixtragen
+clixtragen/common.py
+clixtragen/utils.py
+clixtragen/generators/zsh.py
+clixtragen/parsers/python.py

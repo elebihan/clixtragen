@@ -13,7 +13,7 @@ Generate helpers for a CLI
 SYNOPSIS
 ========
 
-clixtragen [OPTIONS] <program name> <source file>
+clixtragen [OPTIONS] <executable name> <source file>
 
 DESCRIPTION
 ===========
@@ -25,5 +25,6 @@ OPTIONS
 =======
 
 -o FILE, --output FILE          set output filename
+-y, --yaml                      print program invocation as YAML and exit
 
 .. vim: ft=rst
