@@ -42,9 +42,13 @@ setup(name='clixtragen',
       keywords=['command line', 'code generator'],
       install_requires=['docutils >= 0.11'],
       packages=find_packages(),
-      scripts=['scripts/clixtragen'],
-      data_files=[],
+      data_files=[('share/man/man1', ['build/man/man1/clixtragen.1'])],
       include_package_data=True,
+      entry_points={
+          'console_scripts': [
+              'clixtragen = clixtragen.cli:main',
+          ]
+      },
       author='Eric Le Bihan',
       author_email='eric.le.bihan.dev@free.fr',
       cmdclass={'build': build,

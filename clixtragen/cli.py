@@ -34,7 +34,8 @@ logging.basicConfig()
 
 setup_i18n()
 
-if __name__ == '__main__':
+
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--version',
                         action='version',
